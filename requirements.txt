@@ -1,0 +1,8 @@
+prisma
+asyncio
+uvicorn
+ariadne
+nodeenv
+bcrypt
+# json
+secrets

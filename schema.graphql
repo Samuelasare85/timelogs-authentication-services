@@ -1,0 +1,81 @@
+scalar DateTime
+scalar EmailAddress
+scalar _FieldSet
+
+directive @shareable on OBJECT | FIELD_DEFINITION
+# directive @external on OBJECT | FIELD_DEFINITION
+# directive @key(fields: _FieldSet!, resolvable: Boolean = true) repeatable on OBJECT | INTERFACE
+
+type schema {
+    query: Query
+    mutation: Mutation
+}
+
+
+type User @key(fields: "id") {
+    id: ID!
+    username : String
+    first_name: String!
+    last_name: String!
+    other_name: String
+    email: EmailAddress!
+    password: String!
+    department: String!
+    created_at: String
+    deleted: Boolean
+    deleted_at: String @default("Null")
+    role: Role!
+}
+
+
+type Query {
+    me: String
+    user(id:ID!): User
+    allUsers: [User!]!
+    activeUsers: [User!]
+    inActiveUsers: [User!]
+    getUsersByDepartment(department:String!): [User!]
+}
+
+type Mutation {
+    createUser(input: UserCreateInput!): Payload!
+    loginUser(input: UserLoginInput!): Payload!
+    logoutUser(email: EmailAddress!): Payload!
+    updateUser(input: UserUpdateInput!): Payload!
+    deleteUser(input: UserDeleteInput!): Payload!
+}
+
+type Payload {
+    message: String
+    user: User
+}
+
+enum Role {
+    USER
+    ADMIN
+}
+
+input UserUpdateInput {
+    id: Int
+    first_name: String
+    last_name: String
+    email: EmailAddress
+    department : String
+}
+
+input UserCreateInput {
+    first_name: String!
+    last_name: String!
+    email: EmailAddress!
+    password: String!
+    department: String
+}
+
+input UserDeleteInput {
+    email: String!
+}
+
+input UserLoginInput {
+    email: EmailAddress!
+    password: String!
+}

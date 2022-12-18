@@ -1,0 +1,33 @@
+// This is your Prisma schema file,
+// learn more about it in the docs: https://pris.ly/d/prisma-schema
+
+generator db {
+  provider             = "prisma-client-py"
+  interface            = "asyncio"
+  recursive_type_depth = 5
+}
+
+datasource db {
+  provider = "postgresql"
+  url      = env("DATABASE_URL")
+}
+
+model User{
+  id Int @id @default(autoincrement())
+  username String?
+  first_name String
+  last_name String
+  other_name String?
+  email String @unique
+  password String
+  department String 
+  created_at DateTime? @default(now())
+  deleted Boolean? @default(false)
+  deleted_at DateTime? @default(now())
+  role Role @default(USER)
+}
+
+enum Role{
+  USER
+  ADMIN
+}
